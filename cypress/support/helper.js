@@ -27,12 +27,12 @@ export function findProductByName(productName){
     function findElement (){
     cy.get('a.prdocutname').then(($el) => {
         if ($el.text().includes(productName)) {
-          cy.get'a',productName)
-          .click()
+          cy.get(`a[title="${productName}"]`)
+            .click()
         }
         else{
             cy.contains('a', '>').click().wait(200)
-                findElement();
+            findElement();
         }
       });
     }

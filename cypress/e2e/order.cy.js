@@ -47,7 +47,7 @@ it.only('Place order HW', () => {
 
   findProductByName('Acqua Di Gio Pour Homme');
 
-  cy.get('.quick_basket').click();
+  cy.get('.productpagecart .cart').click();
 
   cy.log('Open basket')
   cy.get('#cart_checkout1').click();
