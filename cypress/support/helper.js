@@ -22,3 +22,25 @@ export function checkAlertStyles(){
         .and('have.css', 'border-bottom-color', 'rgb(235, 204, 209)')
         .and('have.css', 'color', 'rgb(169, 68, 66)')
 }
+
+export function findProductByName(productName){
+    function findElement (){
+    cy.get('a.prdocutname').then(($el) => {
+        if ($el.text().includes(productName)) {
+          cy.get'a',productName)
+          .click()
+        }
+        else{
+            cy.contains('a', '>').click().wait(200)
+                findElement();
+        }
+      });
+    }
+    findElement()
+}
+
+
+    
+    
+
+
