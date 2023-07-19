@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import user from '../fixtures/user.json';
-import { helper } from '../support/helper.js';
-
+import homePage from '../support/pages/HomePage'
+import HomePageWithConstructor from '../support/pages/HomePageWithConstructor'
 user.address = faker.location.streetAddress();
 user.city = faker.location.city();
 user.company = faker.company.name();
@@ -15,8 +15,10 @@ user.phoneNumber = faker.phone.number('+380## ### ## ##');
 user.zipCode = faker.location.zipCode();
 
   it('Registration', () => {
-    cy.visit('/');
-    cy.get('#customer_menu_top').click();
+    homePage.visit('/');
+    homePage.getLoginOrRegisterButton().click()
+
+//(`${HomePageWithConstructor.elements.getLoginOrRegisterButton()`).click() - how to use constructor
 
       cy.log('**Opening registration form ...**');
       cy.get('#accountFrm button').click();
