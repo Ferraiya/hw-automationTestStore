@@ -24,19 +24,16 @@ export function checkAlertStyles(){
 }
 
 export function findProductByName(productName){
-    function findElement (){
     cy.get('a.prdocutname').then(($el) => {
         if ($el.text().includes(productName)) {
           cy.get(`a[title="${productName}"]`)
             .click()
         }
         else{
-            cy.contains('a', '>').click().wait(200)
-            findElement();
+            cy.contains('a', '>').click()
+            findProductByName(productName);
         }
       });
-    }
-    findElement()
 }
 
 

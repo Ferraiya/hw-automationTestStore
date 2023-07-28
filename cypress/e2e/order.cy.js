@@ -1,14 +1,13 @@
 import user from '../fixtures/user.json';
-import {loginViaUI} from '../support/helper';
-import {findProductByName} from '../support/helper';
+import {loginViaUI} from '../support/helper.js';
+import {findProductByName} from '../support/helper.js';
 
 beforeEach ('Go to login page', () => {
-    cy.visit('/index.php?rt=account/login');
-  }) 
+  cy.visit('/index.php?rt=account/login');
+  loginViaUI(user);
+})
 
 it('Place order', () => {
-
-    loginViaUI(user);
 
     cy.log('Add random product to cart from main page')
     cy.visit('/');
@@ -38,10 +37,7 @@ it('Place order', () => {
 
 it.only('Place order HW', () => {
 
-  loginViaUI(user);
-
   cy.log('Add random product to cart from main page')
-  cy.visit('/');
 
   cy.get('input#filter_keyword').type('i{enter}');
 
