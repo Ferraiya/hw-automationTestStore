@@ -1,6 +1,8 @@
-class AccountLoginPage extends BasePage{
+import BasePage from "./BasePage";
+
+class AccountCreatePage extends BasePage{
     visit(){
-     cy.visit('/')
+     cy.visit('/index.php&rt=account/create')
     }
 
     getFirstNameField(){
@@ -33,7 +35,12 @@ class AccountLoginPage extends BasePage{
     getZoneIDField(){
         return cy.get('#AccountFrm_zone_id');
     }
-
+    getCityField(){
+        return cy.get('#AccountFrm_city');
+    }
+    getPostCodeField(){
+        return cy.get('#AccountFrm_postcode');
+    }
 
     getLoginField(){
         return cy.get('#AccountFrm_loginname');
@@ -58,4 +65,33 @@ class AccountLoginPage extends BasePage{
     getSubmitRegistrationFormButton(){
         return cy.get('.form-group [type="submit"]');
     }
+    getErrorMessageText(){
+
 }
+
+
+    fillInRegistrationForm(user){
+      cy.log('**Fill in registration form ...**');
+      this.getFirstNameField().type(user.firstName);
+      this.getLastNameField().type(user.lastName);
+      this.getEmailField().type(user.email);
+      this.getPhoneField().type(user.phoneNumber);
+    // cy.get('#AccountFrm_fax').type(user.fax);
+        this.getCompanyField().type(user.company);
+        this.getCountryIDField().type(user.address);
+        this.getCityField().type(user.city);
+        this.getCountryIDField().select(user.country);
+        this.getZoneIDField().select(user.region);
+        this.getPhoneField().type(user.zipCode);
+        this.getLoginField().type(user.loginName);
+        this.getPasswordField().type(user.password);
+        this.getPasswordConfirmField().type(user.password);
+
+      cy.log('**Decline news letter and confirm privacy policy ...**');
+      this.getLoginOrRegisterButton().check();
+      this.getPrivacyPolicyCheckBox().check();
+      this.getSubmitRegistrationFormButton().click();
+    }
+}
+
+export default new AccountCreatePage();

@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker';
 import user from '../fixtures/user.json';
-import homePage from '../support/pages/HomePage'
-import HomePageWithConstructor from '../support/pages/HomePageWithConstructor'
+import homePage from '../support/pages/HomePage';
+import accountLoginPage from '../support/pages/AccountLoginPage';
+import accountCreatePage from '../support/pages/AccountCreatePage';
+import accountSuccessPage from '../support/pages/AccountSuccessPage';
+//import homePageWithConstructor from '../support/pages/HomePageWithConstructor';
 user.address = faker.location.streetAddress();
 user.city = faker.location.city();
 user.company = faker.company.name();
@@ -14,37 +17,15 @@ user.password = faker.internet.password({length: 20});
 user.phoneNumber = faker.phone.number('+380## ### ## ##');
 user.zipCode = faker.location.zipCode();
 
-  it('Registration', () => {
-    homePage.visit('/');
-    homePage.getLoginOrRegisterButton().click()
+  it('Successful Registration', () => {
+      // homePageWithConstructor.getLoginOrRegisterButton().click()
 
-//(`${HomePageWithConstructor.elements.getLoginOrRegisterButton()`).click() - how to use constructor
-
-      cy.log('**Opening registration form ...**');
-      cy.get('#accountFrm button').click();
-
-      cy.log('**Fill in registration form ...**');
-      cy.get('#AccountFrm_firstname').type(user.firstName);
-      cy.get('#AccountFrm_lastname').type(user.lastName);
-      cy.get('#AccountFrm_email').type(user.email);
-      cy.get('#AccountFrm_telephone').type(user.phoneNumber);
-    // cy.get('#AccountFrm_fax').type(user.fax);
-      cy.get('#AccountFrm_company').type(user.company);
-      cy.get('#AccountFrm_address_1').type(user.address);
-      cy.get('#AccountFrm_city').type(user.city);
-      cy.get('#AccountFrm_country_id').select(user.country);
-      cy.get('#AccountFrm_zone_id').select(user.region);
-      cy.get('#AccountFrm_postcode').type(user.zipCode);
-      cy.get('#AccountFrm_loginname').type(user.loginName);
-      cy.get('#AccountFrm_password').type(user.password);
-      cy.get('#AccountFrm_confirm').type(user.password);
-
-      cy.log('**Decline news letter and confirm privacy policy ...**');
-      cy.get('#AccountFrm_newsletter0[type="radio"]').check();
-      cy.get('#AccountFrm_agree').check();
-      cy.get('.form-group [type="submit"]').click();
-
-      cy.get('.maintext').should('be.visible').and('contain', "Your Account Has Been Created")
+      //(`${HomePageWithConstructor.elements.getLoginOrRegisterButton()`).click() - how to use constructor
+      cy.log
+      homePage.getLoginOrRegisterButton().click();
+      accountLoginPage.getRegisterButton().click();
+      accountCreatePage.fillInRegistrationForm(user);
+      accountSuccessPage.getSuccessMessageText().should('be.visible').and('contain', "Your Account Has Been Created")
     })
 
     it('First Log in', () => {
@@ -60,4 +41,24 @@ user.zipCode = faker.location.zipCode();
 
       cy.log('**Verifying "My account" page...**');
       cy.get('.heading1 .subtext').should('have.text', user.firstName);
+    })
+
+    it('Registration attempt without email', () => {
+      user.email = " ";
+      homePage.visit();
+
+      homePage.getLoginOrRegisterButton().click();
+      accountLoginPage.getRegisterButton().click();
+      accountCreatePage.fillInRegistrationForm(user);
+      accountCreatePage.getErrorMessageText().should('contain', 'Email Address does not appear to be valid')
+    })
+
+    it('Registration attempt without firstName', () => {
+      user.firstName = "{leftArrow}";
+      homePage.visit();
+
+      homePage.getLoginOrRegisterButton().click();
+      accountLoginPage.getRegisterButton().click();
+      accountCreatePage.fillInRegistrationForm(user);
+      accountCreatePage.getErrorMessageText().should('contain', 'First Name must be between 1 and 32 characters!')
     })

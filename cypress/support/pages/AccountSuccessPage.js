@@ -1,11 +1,11 @@
-class AccountLoginPage extends BasePage{
+class AccountSuccessPage{
     visit(){
      cy.visit('/index.php?rt=account/success')
     }
 
     getSuccessMessageText(){
-        return cy.get('.maintext')
+        return cy.get('.maintext');
     }
-
-
 }
+
+export default new AccountSuccessPage();
