@@ -4,6 +4,7 @@ import homePage from '../support/pages/HomePage';
 import accountLoginPage from '../support/pages/AccountLoginPage';
 import accountCreatePage from '../support/pages/AccountCreatePage';
 import accountSuccessPage from '../support/pages/AccountSuccessPage';
+import myAccountPage from '../support/pages/MyAccountPage';
 //import homePageWithConstructor from '../support/pages/HomePageWithConstructor';
 user.address = faker.location.streetAddress();
 user.city = faker.location.city();
@@ -21,7 +22,6 @@ user.zipCode = faker.location.zipCode();
       // homePageWithConstructor.getLoginOrRegisterButton().click()
 
       //(`${HomePageWithConstructor.elements.getLoginOrRegisterButton()`).click() - how to use constructor
-      cy.log
       homePage.getLoginOrRegisterButton().click();
       accountLoginPage.getRegisterButton().click();
       accountCreatePage.fillInRegistrationForm(user);
@@ -29,18 +29,12 @@ user.zipCode = faker.location.zipCode();
     })
 
     it('First Log in', () => {
-      cy.visit('/');
-      cy.get('#customer_menu_top').click();
+      homePage.visit();
+      homePage.getLoginOrRegisterButton().click();
 
-      cy.log('**Submit login form...**')
-      cy.get('#loginFrm_loginname').type(user.loginName);
-      cy.get('#loginFrm_password').type(user.password);
-      cy.get('#customer_menu_top').click();
-      cy.get('#customer_menu_top').click();
-      cy.get('.form-group [type="submit"]').click();
-
+      accountLoginPage.fillInLoginForm(user)
       cy.log('**Verifying "My account" page...**');
-      cy.get('.heading1 .subtext').should('have.text', user.firstName);
+      myAccountPage.getHeadingName().should('have.text', user.firstName);
     })
 
     it('Registration attempt without email', () => {

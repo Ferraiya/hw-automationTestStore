@@ -5,13 +5,7 @@ export function loginViaUI(user){
     cy.get('#loginFrm_password').type(user.loginPassword);
     cy.get('#loginFrm button').click();
 }
-export function login2(user){
-    cy.log('**Submit login form ...**');
 
-    user.loginName ? cy.get('#loginFrm_loginname').type(user.loginName) : cy.log('User loginname is empty, skip entering login name')
-    user.password ? cy.get('#loginFrm_password').type(user.loginPassword) : cy.log('User password is empty, skip entering password')
-    cy.get('#loginFrm button').click();
-}
 function loginViaAPI(){
 }
 

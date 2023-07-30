@@ -1,67 +1,41 @@
 import user from '../fixtures/user.json';
-import {loginViaUI} from '../support/helper.js';
-import {findProductByName} from '../support/helper.js';
+import {loginViaUI , findProductByName} from '../support/helper.js';
+import myAccountPage from '../support/pages/MyAccountPage.js';
+import accountLoginPage from '../support/pages/AccountLoginPage.js';
+import shoppingCartPage from '../support/pages/ShoppingCartPage';
+import productPage from '../support/pages/ProductPage';
+import checkoutConfirmationPage from '../support/pages/CheckoutConfirmationPage';
+import checkoutSuccessPage from '../support/pages/CheckoutSuccessPage';
 
 beforeEach ('Go to login page', () => {
-  cy.visit('/index.php?rt=account/login');
+  accountLoginPage.visit();
   loginViaUI(user);
 })
 
-it('Place order', () => {
+it ('Place order for first item', () => {
+myAccountPage.addRandomProductToCart();
+shoppingCartPage.getCheckoutButton().click();
+checkoutConfirmationPage.checkUserInfo(user);
 
-    cy.log('Add random product to cart from main page')
-    cy.visit('/');
-    cy.get('.productcart').first().click();
-    cy.get('.quick_basket').click();
+checkoutConfirmationPage.getConfirmOrderButton().click();
 
-    cy.log('Open basket')
-    cy.get('#cart_checkout1').click();
-
-    cy.log('Verify checkout data')
-    cy.get('.table.confirm_shippment_options')
-        .should('contain', user.firstName)
-        .and('contain', user.lastName)
-        .and('contain', user.phoneNumber);
-
-    cy.get('.table.confirm_payment_options')
-        .should('contain', user.firstName)
-        .and('contain', user.lastName)
-        .and('contain', user.phoneNumber);
-
-    cy.log('Confirm order')
-    cy.get('#checkout_btn').click();
-
-    cy.log('Thank you page displayed')
-    cy.get('.maintext').should('contain', 'Your Order Has Been Processed!');
+checkoutSuccessPage.getMainText()
+  .should('contain', 'Your Order Has Been Processed!');
 })
 
-it.only('Place order HW', () => {
+it ('Place order for Acqua Di Gio Pour Homme', () => {
 
-  cy.log('Add random product to cart from main page')
-
-  cy.get('input#filter_keyword').type('i{enter}');
+  myAccountPage.searchItemOnSymbol('i')
 
   findProductByName('Acqua Di Gio Pour Homme');
 
-  cy.get('.productpagecart .cart').click();
+  productPage.getAddToCartButton().click();
+  shoppingCartPage.getCheckoutButton().click();
 
-  cy.log('Open basket')
-  cy.get('#cart_checkout1').click();
+  checkoutConfirmationPage.checkUserInfo(user);
 
-  cy.log('Verify checkout data')
-  cy.get('.table.confirm_shippment_options')
-    .should('contain', user.firstName)
-    .and('contain', user.lastName)
-    .and('contain', user.phoneNumber);
+  checkoutConfirmationPage.getConfirmOrderButton().click();
 
-  cy.get('.table.confirm_payment_options')
-    .should('contain', user.firstName)
-    .and('contain', user.lastName)
-    .and('contain', user.phoneNumber);
-
-  cy.log('Confirm order')
-  cy.get('#checkout_btn').click();
-
-  cy.log('Thank you page displayed')
-  cy.get('.maintext').should('contain', 'Your Order Has Been Processed!');
+  checkoutSuccessPage.getMainText()
+    .should('contain', 'Your Order Has Been Processed!');
 })
